@@ -1607,6 +1607,11 @@
 <div class="toast" id="toast"><span class="dot"></span><span id="toastTxt">Guardado</span></div>
 
 <script>
+/* Direcciones del Apps Script en la cuenta de la empresa (2026-11): si este navegador tenía
+   guardada la dirección vieja (cuenta personal), se cambia por la nueva una sola vez. */
+(function(){try{var V={'https://script.google.com/macros/s/AKfycbzPfXZFs9GVEfBfDERzGGzxO8OgoRaMOHIg_QO9jOpMP31BkvENFenAP9rubgh_GPcW4Q/exec':'https://script.google.com/macros/s/AKfycbzh72H0j_OxcQAltoltMq3TY8MYlzxYCgCyKor37VX1k7X1KAbsLZHLuamN3CntccwElA/exec','https://script.google.com/macros/s/AKfycbyNTe_wL3a2GKse5qBjRBuU4zpemFDrkvzI56ysXazt77L0wAKxEg5ykyl-bBO5DW2L/exec':'https://script.google.com/macros/s/AKfycbx8E2Ag_ZBNkyEbMytrKxOcFfUtwbKx9vW-dz3SPwwivvG6HrZg5yaSlJqkIxL9HykR/exec'};
+  ['prove_nube_url','prove_gps_url','prove_nube_mudado','ubg_datos_url'].forEach(function(k){var v=localStorage.getItem(k);if(v&&V[v.trim()])localStorage.setItem(k,V[v.trim()]);});
+}catch(e){}})();
 /* ============ ÍCONO Y MANIFIESTO INCRUSTADOS ============
    Permiten "Agregar a pantalla de inicio" y que abra a pantalla completa,
    sin archivos externos. start_url se toma de la URL actual, así que
@@ -1676,7 +1681,7 @@ const KEY = 'prove_errores_despacho_v1';
 const KEY_SES = 'prove_errores_sesion_v1';
 const KEY_UNIV = 'prove_errores_universo_v1';
 const KEY_PAD = 'prove_errores_padron_v1';
-const API = 'https://script.google.com/macros/s/AKfycbzPfXZFs9GVEfBfDERzGGzxO8OgoRaMOHIg_QO9jOpMP31BkvENFenAP9rubgh_GPcW4Q/exec';
+const API = 'https://script.google.com/macros/s/AKfycbzh72H0j_OxcQAltoltMq3TY8MYlzxYCgCyKor37VX1k7X1KAbsLZHLuamN3CntccwElA/exec';
 let datos = JSON.parse(localStorage.getItem(KEY) || '[]');
 let sesion = JSON.parse(localStorage.getItem(KEY_SES) || 'null'); // {usuario, clave, rol, nombre}
 
