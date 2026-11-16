@@ -1824,19 +1824,30 @@ function explicarNoJson(status, txt){
   return 'HTTP '+status+': el servidor respondió algo que no es JSON.';
 }
 
+/* Mudanza a la cuenta de la empresa (2026-11): la dirección vieja contesta {mudado:'<URL nueva>'}.
+   Se guarda la nueva (la comparten todas las apps de este navegador) y se repite la petición allá. */
+const URL_NUBE_VALIDA=/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]{20,}\/exec$/;
+function apiUrl(){ try{ const u=(localStorage.getItem('prove_nube_mudado')||'').trim(); if(URL_NUBE_VALIDA.test(u)) return u; }catch(e){} return API; }
+function siguioMudanza(j,url){
+  if(!(j && j.mudado && URL_NUBE_VALIDA.test(j.mudado) && j.mudado!==url)) return false;
+  try{ localStorage.setItem('prove_nube_mudado', j.mudado); }catch(e){}
+  return true;
+}
 // POST al Apps Script. Usa text/plain para evitar preflight CORS.
 async function apiPost(body){
-  const r = await fetch(API,{
+  const enviar = async url => leerJson(await fetch(url,{
     method:'POST',
     headers:{'Content-Type':'text/plain;charset=utf-8'},
     body:JSON.stringify(body)
-  });
-  return await leerJson(r);
+  }));
+  const url = apiUrl(), j = await enviar(url);
+  return siguioMudanza(j,url) ? await enviar(j.mudado) : j;
 }
 // Solo queda para el ping de diagnóstico: desde la v4 el GET ya no entrega datos.
 async function apiGet(accion){
-  const r = await fetch(API+'?accion='+encodeURIComponent(accion));
-  return await leerJson(r);
+  const leer = async url => leerJson(await fetch(url+'?accion='+encodeURIComponent(accion)));
+  const url = apiUrl(), j = await leer(url);
+  return siguioMudanza(j,url) ? await leer(j.mudado) : j;
 }
 
 // Descarga los errores de la nube y funde con lo local (la nube manda por id)
